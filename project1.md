@@ -177,3 +177,7 @@ In the output I will see your server’s public hostname (DNS name) and public I
   http://<Public-DNS-Name>:80
   
   I can leave this file in place as a temporary landing page for your application until you set up an index.php file to replace it. Once I do that, I'll make sure I remember to remove or rename the index.html file from my document root, as it would take precedence over any index.php file by default.
+  
+  ## Enable PHP on the website
+  
+  
