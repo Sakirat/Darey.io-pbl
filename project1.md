@@ -20,7 +20,7 @@ Install Apache using Ubuntu’s package manager  'apt'
  
  sudo apt install apache2
  
- To verify that apache2 is running as a Service in our OS, use following command
+ To verify that apache2 is running as a Service in my OS, i used following command
  
  sudo systemctl status apache2
  
@@ -29,3 +29,11 @@ Install Apache using Ubuntu’s package manager  'apt'
 Before I can receive any traffic by my Web Server, I need to open TCP port 80 which is the default port that web browsers use to access web pages on the Internet
 
 i need to add a rule to EC2 configuration to open inbound connection through port 80:
+
+time to test how my Apache HTTP server can respond to requests from the Internet.
+
+Open a web browser of your choice and try to access following url
+
+http://<Public-IP-Address>:80
+  
+![image](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/dc331ece-71f3-4c4f-8619-e16c8af25b28)
