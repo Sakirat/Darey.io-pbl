@@ -29,8 +29,10 @@ Install Apache using Ubuntu’s package manager  'apt'
  this should be green and running, I have just launched my first Web Server in the Clouds
 
 Before I can receive any traffic by my Web Server, I need to open TCP port 80 which is the default port that web browsers use to access web pages on the Internet
-
 i need to add a rule to EC2 configuration to open inbound connection through port 80:
+
+![installing Apache2](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/c25360b6-e7dd-469f-a7ea-a5685765d4c0)
+
 
 time to test how my Apache HTTP server can respond to requests from the Internet.
 
@@ -62,7 +64,9 @@ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'PassWord
   I start interactive script by running:
   
   $ sudo mysql_secure_installation
-  
+
+  ![installing mysql](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/3767b650-3925-4f90-ba44-22b17a187dbb)
+
   this will ask if i want to validate password pligin, i answer Y for Yes
   Regardless of whether I chose to set up the VALIDATE PASSWORD PLUGIN, my server will next ask me to select and confirm a password for the MySQL root user. This is not to be confused with the system root. The database root user is an administrative user with full privileges over the database system. Even though the default authentication method for the MySQL root user dispenses the use of a password, even when one is set, you should define a strong password here as an additional safety measure.
 If I enabled password validation, I’ll be shown the password strength for the root password I just entered and my server will ask if I want to continue with that password. If I'm happy with my current password, enter Y for “yes” at the prompt:
@@ -72,6 +76,9 @@ If I enabled password validation, I’ll be shown the password strength for the 
   
   Notice the -p flag in this command, which will prompt me for the password used after changing the root user password.To exit the MySQL console, type:
     mysql> exit
+
+    ![setting and changing root user password on MYSQL](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/948791eb-9a78-4c4a-9406-a32e4d749a32)
+
   
  ## 4. Installing PHP 
   
@@ -84,7 +91,12 @@ To install these 3 packages at once, I run the code
   Once the installation is finished, I can run the following command to confirm my PHP version:
   
   php -v
-  
+
+  ![installing PHP](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/26661dbd-76b8-4c7b-a302-1cf628437246)
+
+
+  ![checking PHP Version](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/748534b4-8397-4122-9504-1046205ccf57)
+
   
   At this point, my LAMP stack is completely installed and fully operational.
 
@@ -112,6 +124,8 @@ Then,I'll create and open a new configuration file in Apache’s sites-available
   
   This will create a new blank file. Paste in the following bare-bones configuration by hitting on i on the keyboard to enter the insert mode, and paste the text:
 
+![using ls to show the new files in the sites-available directory](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/cc0ff541-a87c-4bb1-b06c-3d40d3e14951)
+
 <VirtualHost *:80>
     ServerName projectlamp
     ServerAlias www.projectlamp 
@@ -128,7 +142,9 @@ Type :
 Type wq. w for write and q for quit
 I Hit ENTER to save the file
 You can use the ls command to show the new file in the sites-available directory
-  
+
+  ![make directory project lamp using vi or vim](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/d36de5b1-6d45-4487-bb86-42828446acd4)
+
   sudo ls /etc/apache2/sites-available
   
   I will see something like this;
@@ -160,11 +176,17 @@ You can use the ls command to show the new file in the sites-available directory
   Now I go to your browser and try to open your website URL using IP address:
   
   http://<Public-IP-Address>:80
+
+  ![Hello LAMP from hostname on browser](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/b932ed80-95e7-4cc4-81c3-f85108006a09)
+
   
   I will see the text from the echo command
 In the output I will see your server’s public hostname (DNS name) and public IP address. i can also access your website in my browser by public DNS name, not only by IP – (port is optional)
   
   http://<Public-DNS-Name>:80
+
+![accessing website using public DNS name](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/9b3d6e93-789f-4476-acb9-846c3c55e04f)
+
   
   I can leave this file in place as a temporary landing page for your application until you set up an index.php file to replace it. Once I do that, I'll make sure I remember to remove or rename the index.html file from my document root, as it would take precedence over any index.php file by default.
   
