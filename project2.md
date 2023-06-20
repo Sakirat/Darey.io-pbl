@@ -273,8 +273,7 @@ Save and close the file when you are done editing. You can now access this page 
 
 http://<Public_domain_or_IP>/todo_list.php
 
-![image](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/76a996d3-c091-471f-82e6-19bd1e93cb77)
-
+![my todo list website](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/dbea5130-7f7d-4600-b69e-06c53a55246e)
 
 You should see a page like this, showing the content you’ve inserted in your test table: That means your PHP environment is ready to connect and interact with your MySQL server. Congratulations! In this guide, we have built a flexible foundation for serving PHP websites and applications to your visitors, using Nginx as web server and MySQL as database management system.
 
