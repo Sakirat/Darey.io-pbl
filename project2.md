@@ -197,9 +197,6 @@ sudo nano /var/www/projectLEMP/info.php
 
 Type or paste the following lines into the new file. This is valid PHP code that will return information about your server:
 
-<?php
-phpinfo();
-
 You can now access this page in your web browser by visiting the domain name or public IP address you’ve set up in your Nginx configuration file, followed by /info.php:
 
 http://`server_domain_or_IP`/info.php
@@ -267,24 +264,6 @@ Now you can create a PHP script that will connect to MySQL and query for your co
 nano /var/www/projectLEMP/todo_list.php
 
 The following PHP script connects to the MySQL database and queries for the content of the todo_list table, displays the results in a list. If there is a problem with the database connection, it will throw an exception. Copy this content into your todo_list.php script:
-
-<?php
-$user = "example_user";
-$password = "password";
-$database = "example_database";
-$table = "todo_list";
-
-try {
-  $db = new PDO("mysql:host=localhost;dbname=$database", $user, $password);
-  echo "<h2>TODO</h2><ol>";
-  foreach($db->query("SELECT content FROM $table") as $row) {
-    echo "<li>" . $row['content'] . "</li>";
-  }
-  echo "</ol>";
-} catch (PDOException $e) {
-    print "Error!: " . $e->getMessage() . "<br/>";
-    die();
-}
 
 Save and close the file when you are done editing. You can now access this page in your web browser by visiting the domain name or public IP address configured for your website, followed by /todo_list.php:
 
