@@ -190,3 +190,25 @@ If you see the text from ‘echo’ command you wrote to index.html file, then i
 In the output you will see your server’s public hostname (DNS name) and public IP address. You can also access your website in your browser by public DNS name, not only by IP – try it out, the result must be the same (port is optional) http://<Public-DNS-Name>:80
 
 You can leave this file in place as a temporary landing page for your application until you set up an index.php file to replace it. Once you do that, remember to remove or rename the index.html file from your document root, as it would take precedence over an index.php file by default. Your LEMP stack is now fully configured. In the next step, we’ll create a PHP script to test that Nginx is in fact able to handle .php files within your newly configured website.
+
+### Testing PHP With Nginx
+
+Your LEMP stack should now be completely set up. At this point, your LAMP stack is completely installed and fully operational. You can test it to validate that Nginx can correctly hand .php files off to your PHP processor.You can do this by creating a test PHP file in your document root. Open a new file called info.php within your document root in your text editor:
+
+
+sudo nano /var/www/projectLEMP/info.php
+
+Type or paste the following lines into the new file. This is valid PHP code that will return information about your server:
+
+<?php
+phpinfo();
+
+You can now access this page in your web browser by visiting the domain name or public IP address you’ve set up in your Nginx configuration file, followed by /info.php:
+
+http://`server_domain_or_IP`/info.php
+
+![my php page on website](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/c90fc2ad-b635-4491-bfca-a1ef0e50bd12)
+
+After checking the relevant information about your PHP server through that page, it’s best to remove the file you created as it contains sensitive information about your PHP environment and your Ubuntu server. You can use rm to remove that file: You can always regenerate this file if you need it later.
+
+sudo rm /var/www/your_domain/info.php
