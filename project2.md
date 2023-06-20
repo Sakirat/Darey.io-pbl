@@ -27,3 +27,11 @@ Our server is running and we can access it locally and from the Internet (Source
  $ curl http://localhost:80
 or
 $ curl http://127.0.0.1:80
+
+Now it is time for us to test how our Nginx server can respond to requests from the Internet. Open a web browser of your choice and try to access following url
+
+http://<Public-IP-Address>:80 
+
+Another way to retrieve your Public IP address, other than to check it in AWS Web console, is to use following command:
+
+curl -s http://169.254.169.254/latest/meta-data/public-ipv4
