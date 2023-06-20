@@ -238,7 +238,9 @@ Notice the -p flag in this command, which will prompt you for the password used 
 
 mysql> SHOW DATABASES;
 
-![SQL show databases](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/c8a0f460-818d-48fc-bb3d-452872f781d4)
+
+![SQL show databases](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/0e9544ee-7ba1-4b89-8440-c5e5d5ec2477)
+
 
 Next, we’ll create a test table named todo_list. From the MySQL console, run the following statement:
 
@@ -252,7 +254,9 @@ To confirm that the data was successfully saved to your table, run:
 
 mysql>  SELECT * FROM example_database.todo_list;
 
-![create table insert values in table](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/ac6850ff-bb95-4b6d-8126-d4d8452a0e22)
+
+![create table insert values in table](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/81a7542c-1d81-4472-917c-88f0f9d91f78)
+
 
 After confirming that you have valid data in your test table, you can exit the MySQL console:
 
@@ -284,7 +288,9 @@ try {
 
 Save and close the file when you are done editing. You can now access this page in your web browser by visiting the domain name or public IP address configured for your website, followed by /todo_list.php:
 
-![nano script to conncet php  to mysql database and queries](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/905444cb-5afa-44a2-81cd-33d886fde9c3)
+
+![nano script to conncet php  to mysql database and queries](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/ed9f5154-6f5c-4426-8b51-5942f885bd11)
+
 
 http://<Public_domain_or_IP>/todo_list.php
 
