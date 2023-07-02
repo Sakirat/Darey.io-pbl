@@ -16,15 +16,15 @@ APACHE HTTP SERVER is the most widely used web server software. Developed and ma
 
 Install Apache using Ubuntu’s package manager  'apt'
 
- sudo apt update
+ `sudo apt update`
  
  run apache2 package installation
  
- sudo apt install apache2
+ `sudo apt install apache2`
  
  To verify that apache2 is running as a Service in my OS, i used following command
  
- sudo systemctl status apache2
+ `sudo systemctl status apache2`
  
  this should be green and running, I have just launched my first Web Server in the Clouds
 
@@ -48,22 +48,23 @@ http://<Public-IP-Address>:80
 
 Again, I use ‘apt’ to acquire and install this software:
   
-  $ sudo apt install mysql-server
+  `$ sudo apt install mysql-server`
   
   i will log into mysql console by typing
-  $ sudo mysql
+  
+  `$ sudo mysql`
 
   It’s recommended that you run a security script that comes pre-installed with MySQL. This script will remove some insecure default settings and lock down access to your database system. Before running the script you will set a password for the root user, using mysql_native_password as default authentication method. change the password to a strong password and then test if mysql works afterwards
   
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'PassWord.1';
+`ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'PassWord.1';`
   
   exit mysql with
   
- mysql> exit
+ `mysql> exit`
   
   I start interactive script by running:
   
-  $ sudo mysql_secure_installation
+  `$ sudo mysql_secure_installation`
 
   ![installing mysql](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/3767b650-3925-4f90-ba44-22b17a187dbb)
 
@@ -72,10 +73,11 @@ ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'PassWord
 If I enabled password validation, I’ll be shown the password strength for the root password I just entered and my server will ask if I want to continue with that password. If I'm happy with my current password, enter Y for “yes” at the prompt:
    For the rest of the questions, I press Y and hit the ENTER key at each prompt. This will prompt ME to change the root password, remove some anonymous users and the test database, disable remote root logins, and load these new rules so that MySQL immediately respects the changes you have made. When finished, I test if I'm able to log in to the MySQL console by typing: 
   
-  $ sudo mysql -p
+  `$ sudo mysql -p`
   
   Notice the -p flag in this command, which will prompt me for the password used after changing the root user password.To exit the MySQL console, type:
-    mysql> exit
+  
+    `mysql> exit`
 
     ![setting and changing root user password on MYSQL](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/948791eb-9a78-4c4a-9406-a32e4d749a32)
 
@@ -86,11 +88,11 @@ If I enabled password validation, I’ll be shown the password strength for the 
 
 To install these 3 packages at once, I run the code
   
-  sudo apt install php libapache2-mod-php php-mysql
+  `sudo apt install php libapache2-mod-php php-mysql`
   
   Once the installation is finished, I can run the following command to confirm my PHP version:
   
-  php -v
+  `php -v`
 
   ![installing PHP](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/26661dbd-76b8-4c7b-a302-1cf628437246)
 
@@ -116,11 +118,11 @@ I will leave this configuration as is and will add my own directory next to the 
 
 I will Create the directory for projectlamp using ‘mkdir’ command as follows:
   
-  sudo mkdir /var/www/projectlamp
+  `sudo mkdir /var/www/projectlamp`
   
 Then,I'll create and open a new configuration file in Apache’s sites-available directory using my preferred command-line editor. Here, I’ll be using vi or vim (They are the same by the way):  
   
-  sudo vi /etc/apache2/sites-available/projectlamp.conf
+  `sudo vi /etc/apache2/sites-available/projectlamp.conf`
   
   This will create a new blank file. Paste in the following bare-bones configuration by hitting on i on the keyboard to enter the insert mode, and paste the text:
 
@@ -145,7 +147,7 @@ You can use the ls command to show the new file in the sites-available directory
 
   ![make directory project lamp using vi or vim](https://github.com/Sakirat/Darey.io-pbl/assets/110112922/d36de5b1-6d45-4487-bb86-42828446acd4)
 
-  sudo ls /etc/apache2/sites-available
+  `sudo ls /etc/apache2/sites-available`
   
   I will see something like this;
   
@@ -155,23 +157,23 @@ You can use the ls command to show the new file in the sites-available directory
   
   I can now use a2ensite command to enable the new virtual host:
   
-  sudo a2ensite projectlamp
+  `sudo a2ensite projectlamp`
   
   I might want to disable the default website that comes installed with Apache. This is required if I'm not using a custom domain name, because in this case Apache’s default configuration would overwrite my virtual host. To disable Apache’s default website use a2dissite command , type:
   
-  sudo a2dissite 000-default
+  `sudo a2dissite 000-default`
   
   To make sure my configuration file doesn’t contain syntax errors, run:
   
-  sudo apache2ctl configtest
+  `sudo apache2ctl configtest`
   
   Finally, reload Apache so these changes take effect:
   
-  sudo systemctl reload apache2
+  `sudo systemctl reload apache2`
   
   my new website is now active, but the web root /var/www/projectlamp is still empty. Create an index.html file in that location so that i can test that the virtual host works as expected:
   
-  sudo echo 'Hello LAMP from hostname' $(curl -s http://169.254.169.254/latest/meta-data/public-hostname) 'with public IP' $(curl -s http://169.254.169.254/latest/meta-data/public-ipv4) > /var/www/projectlamp/index.html
+  `sudo echo 'Hello LAMP from hostname' $(curl -s http://169.254.169.254/latest/meta-data/public-hostname) 'with public IP' $(curl -s http://169.254.169.254/latest/meta-data/public-ipv4) > /var/www/projectlamp/index.html`
   
   Now I go to your browser and try to open your website URL using IP address:
   
@@ -181,7 +183,7 @@ You can use the ls command to show the new file in the sites-available directory
 
   
   I will see the text from the echo command
-In the output I will see your server’s public hostname (DNS name) and public IP address. i can also access your website in my browser by public DNS name, not only by IP – (port is optional)
+In the output I will see my server’s public hostname (DNS name) and public IP address. i can also access my website in my browser by public DNS name, not only by IP – (port is optional)
   
   http://<Public-DNS-Name>:80
 
@@ -195,7 +197,7 @@ In the output I will see your server’s public hostname (DNS name) and public I
  With the default DirectoryIndex settings on Apache, a file named index.html will always take precedence over an index.php file. This is useful for setting up maintenance pages in PHP applications, by creating a temporary index.html file containing an informative message to visitors. Because this page will take precedence over the index.php page, it will then become the landing page for the application. Once maintenance is over, the index.html is renamed or removed from the document root, bringing back the regular application page.
 In case I want to change this behavior, I’ll need to edit the /etc/apache2/mods-enabled/dir.conf file and change the order in which the index.php file is listed within the DirectoryIndex directive: 
   
-  sudo vim /etc/apache2/mods-enabled/dir.conf
+  `sudo vim /etc/apache2/mods-enabled/dir.conf`
   
   <IfModule mod_dir.c>
         #Change this:
@@ -206,13 +208,13 @@ In case I want to change this behavior, I’ll need to edit the /etc/apache2/mod
   
   After saving and closing the file, you will need to reload Apache so the changes take effect:
   
-  sudo systemctl reload apache2
+  `sudo systemctl reload apache2`
   
   Finally, we will create a PHP script to test that PHP is correctly installed and configured on your server.
 Now that you have a custom location to host your website’s files and folders, we’ll create a PHP test script to confirm that Apache is able to handle and process requests for PHP files.
 Create a new file named index.php inside your custom web root folder:
 
-vim /var/www/projectlamp/index.php
+`vim /var/www/projectlamp/index.php`
   
 This will open a blank file. Add the following text, which is valid PHP code, inside the file:
 
@@ -224,6 +226,6 @@ This page provides information about your server from the perspective of PHP. It
 If you can see this page in your browser, then your PHP installation is working as expected.
 After checking the relevant information about your PHP server through that page, it’s best to remove the file you created as it contains sensitive information about your PHP environment -and your Ubuntu server. You can use rm to do so:
 
-sudo rm /var/www/projectlamp/index.php
+`sudo rm /var/www/projectlamp/index.php`
 
 You can always recreate this page if you need to access the information again later. Congratulations! You have finished your very first REAL LIFE PROJECT by deploying a LAMP stack website in AWS Cloud!
