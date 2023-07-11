@@ -125,6 +125,7 @@ Verify the entire setup
 Use mkfs.ext4 to format the logical volumes with ext4 filesystem
 
 `sudo mkfs -t ext4 /dev/webdata-vg/apps-lv`
+
 `sudo mkfs -t ext4 /dev/webdata-vg/logs-lv`
 
 ![format the LV with ext4 filesystem](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8ffee82f-4d2c-48dc-9304-03e2d417377c)
@@ -142,7 +143,6 @@ Mount /var/www/html on apps-lv logical volume
 `sudo mount /dev/webdata-vg/apps-lv /var/www/html/`
 
 ![mkdir to store website files and backup of log files then mount on LVs](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8ae22416-5b63-47e0-890a-320c849bfd0f)
-
 
 Use rsync utility to backup all the files in the log directory /var/log into /home/recovery/logs (This is required before mounting the file system)
 
@@ -173,6 +173,7 @@ Update /etc/fstab in this format using your own UUID and rememeber to remove the
 Test the configuration and reload the daemon
 
 `sudo mount -a`
+
 `sudo systemctl daemon-reload`
 
 ![test config and reload daemon](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/9d16b441-f39d-470e-8708-b7fa8ec6eed6)
@@ -181,3 +182,168 @@ Test the configuration and reload the daemon
 Verify your setup by running df -h, output must look like this:
 
 ![verify setup by runninh df -h](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/fa8f1692-f9d8-43ae-a958-8556f877fcfa)
+
+
+## PREPARE THE DATABASE SERVER
+
+Launch a second RedHat EC2 instance that will have a role – ‘DB Server’ Repeat the same steps as for the Web Server, but instead of apps-lv create db-lv and mount it to /db directory instead of /var/www/html/.
+
+![db server 1](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/9f4302ab-5254-4d78-af00-27a8064d7a9e)
+
+![db server 2](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/f0f4a5aa-ecfd-409e-8768-bf6565b687dd)
+
+![db server 3](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/e5744512-3eb8-46ec-b0a5-c3e5f3eb81a2)
+
+![db server 4](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/aa4bd1fd-f58a-4241-a085-407a322b406d)
+
+
+
+##  Install WordPress on your Web Server EC2
+
+Update the repository
+
+`sudo yum -y update`
+
+Install wget, Apache and it’s dependencies
+
+`sudo yum -y install wget httpd php php-mysqlnd php-fpm php-json`
+
+Start Apache
+
+`sudo systemctl enable httpd`
+
+`sudo systemctl start httpd`
+
+To install PHP and it’s depemdencies
+
+`sudo yum install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm`
+
+`sudo yum install yum-utils http://rpms.remirepo.net/enterprise/remi-release-8.rpm`
+
+`sudo yum module list php`
+
+`sudo yum module reset php`
+
+`sudo yum module enable php:remi-7.4`
+
+`sudo yum install php php-opcache php-gd php-curl php-mysqlnd`
+
+`sudo systemctl start php-fpm`
+
+`sudo systemctl enable php-fpm`
+
+`setsebool -P httpd_execmem 1`
+
+Restart Apache
+
+`sudo systemctl restart httpd`
+
+confirm apache is up and running from browser
+
+![apache working fine on browser](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/79972e64-b82e-43d1-9638-c5ab3489960d)
+
+Download wordpress and copy wordpress to var/www/html
+
+  `mkdir wordpress`
+  
+  `cd wordpress`
+  
+  `sudo wget http://wordpress.org/latest.tar.gz`
+  
+  `sudo tar xzvf latest.tar.gz`
+  
+  `sudo rm -rf latest.tar.gz`
+  
+  `cp wordpress/wp-config-sample.php wordpress/wp-config.php`
+  
+  `cp -R wordpress /var/www/html/`
+
+  ![updating vi into wp config php](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/6d99312c-9ff4-4631-b0cc-85418525ac48)
+  
+Configure SELinux Policies
+
+  `sudo chown -R apache:apache /var/www/html/wordpress`
+  
+  `sudo chcon -t httpd_sys_rw_content_t /var/www/html/wordpress -R`
+  
+  `sudo setsebool -P httpd_can_network_connect=1`
+
+  ![sudo chown -R](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/2aa3545e-fddf-445e-a463-cf3d78e8791b)
+
+![1](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/b9fb438e-5661-4009-a128-560b880bdc2a)
+
+![2](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/2cc87e80-0b7f-4cc9-85ff-2f484fa55783)
+
+![3](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/80ccbdb7-c578-407b-ab0d-cfafbd9fc6b6)
+
+![4](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/14c8c2b2-d310-429e-860e-c102852249f5)
+
+
+
+  ## Install MySQL on your DB Server EC2
+
+  `sudo yum update`
+  
+  `sudo yum install mysql-server`
+
+  ![db server 5](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4a246460-a56f-4c20-aed8-deb807c051b7)
+
+
+Verify that the service is up and running by using sudo systemctl status mysqld, if it is not running, restart the service and enable it so it will be running even after reboot:
+
+`sudo systemctl restart mysqld`
+
+`sudo systemctl enable mysqld`
+
+![db server 6](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8ad59681-a510-4d04-b40d-c239751fe25f)
+
+
+## Configure DB to work with WordPress
+
+`sudo mysql`
+
+`CREATE DATABASE wordpress;`
+
+`CREATE USER `myuser`@`<Web-Server-Private-IP-Address>` IDENTIFIED BY 'mypass';`
+
+`GRANT ALL ON wordpress.* TO 'myuser'@'<Web-Server-Private-IP-Address>';`
+
+`FLUSH PRIVILEGES;`
+
+`SHOW DATABASES;`
+
+`exit`
+
+![db server 7](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/3f25952b-6957-4443-af32-1e86ec28ba99)
+
+
+## Configure WordPress to connect to remote database.
+
+Do not forget to open MySQL port 3306 on DB Server EC2. For extra security, you shall allow access to the DB server ONLY from your Web Server’s IP address, so in the Inbound Rule configuration specify source as /32
+
+![open mysql port 3306 on DB server access only from web server](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/5a170c00-af6b-4fdc-84d8-69b953b5f869)
+
+Install MySQL client and test that you can connect from your Web Server to your DB server by using mysql-client
+
+`sudo yum install mysql`
+
+`sudo mysql -u admin -p -h <DB-Server-Private-IP-address>`
+
+Verify if you can successfully execute command below and see a list of existing databases.
+
+`SHOW DATABASES;` 
+
+![db server 8](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/dc606d2a-1459-43e2-9dba-2c8498c16389)
+
+Change permissions and configuration so Apache could use WordPress:
+Enable TCP port 80 in Inbound Rules configuration for your Web Server EC2 (enable from everywhere 0.0.0.0/0 or from your workstation’s IP)
+Try to access from your browser the link to your WordPress http://<Web-Server-Public-IP-Address>/wordpress/
+
+![wordpress working on browser](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/b34d61c2-86dc-4609-91ab-e894e776a0d1)
+
+![wordpress installed username and password set](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/e7c7905a-ea72-462c-be9d-30171a65cd54)
+
+![wordpress fully active](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/25b28bcb-f8d3-4e39-9ddf-08530e73506d)
+
+
+
