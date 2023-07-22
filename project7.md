@@ -127,7 +127,9 @@ Configure access to NFS for clients within the same subnet (example of Subnet CI
 `sudo vi /etc/exports`
 
 /mnt/apps <Subnet-CIDR>(rw,sync,no_all_squash,no_root_squash)
+
 /mnt/logs <Subnet-CIDR>(rw,sync,no_all_squash,no_root_squash)
+
 /mnt/opt <Subnet-CIDR>(rw,sync,no_all_squash,no_root_squash)
 
 Esc + :wq!
