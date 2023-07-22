@@ -143,6 +143,9 @@ Check which port is used by NFS and open it using Security Groups (add new Inbou
 
 `rpcinfo -p | grep nfs`
 
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/c0a2da49-b28b-4107-9885-1cc99c122573)
+
+
  In order for NFS server to be accessible from your client, you must also open following ports: TCP 111, UDP 111, UDP 2049
 
 ![edit inbound rule for TCP and UDP](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/948151f4-e9bb-4e3b-8b66-048f1d1e34e6)
