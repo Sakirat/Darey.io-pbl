@@ -291,6 +291,8 @@ Open the website in your browser http://<Web-Server-Public-IP-Address-or-Public-
 
 ![webserver1 serving php](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/e39e7010-8464-437a-9269-012a55ec5806)
 
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/97d9d1a5-09f5-4658-8a06-c768a616aec4)
+
 
 
 
