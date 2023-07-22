@@ -22,11 +22,11 @@ In order to hide all this complexity and to have a single point of access with a
 
 Let us take a look at the updated solution architecture with an LB added on top of Web Servers (for simplicity let us assume it is a software L7 Application LB, for example – Apache, NGINX or HAProxy)
 
-from this
+### from this
 
 ![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/d46aa059-96c2-4113-817f-a56d912052de)
 
-to this 
+### to this 
 
 ![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/c39ddf8e-dc11-410c-a5f3-a5e44d3370e3)
 
