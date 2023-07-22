@@ -36,7 +36,11 @@ It is important to know what storage solution is suitable for what use cases, fo
 
 Spin up a new EC2 instance 
 
+![NFS instance using Ubuntu OS](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4d30adeb-4d52-4155-b6d2-77b98f865a76)
+
 ![connect to the NFS terminal](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/13fb56bc-90b3-4a5a-bc58-0f3e60312631)
+
+![start enable and check status of nfs server](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/bea27009-d43b-43f2-a8b2-e51e283277be)
 
 ![creating 3 volumes in AWS](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/589b24d6-8cbe-47d2-84ce-9ff24788b31a)
 
@@ -44,6 +48,12 @@ Spin up a new EC2 instance
 Based on your LVM experience from Project 6, Configure LVM on the Server.
 
 Instead of formating the disks as ext4 you will have to format them as xfs
+
+![listing the volumes  created using lslbk](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/023396e2-1617-4d5d-a416-64f96e7cee42)
+
+
+![format the 3 disk as xfs](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/e39cecf7-8d2d-4b68-a6c3-10175c8d6887)
+
 
 Ensure there are 3 Logical Volumes. lv-opt lv-apps, and lv-logs
 
@@ -54,6 +64,9 @@ Ensure there are 3 Logical Volumes. lv-opt lv-apps, and lv-logs
 
 ![creating 3 logical volumes LVapps LVlogs LVopt from VG](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/f6ac6b86-966a-46c8-b7b7-21862aa7e0f7)
 
+![installing LVM2](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/a0decaa8-0f6c-424a-a1fc-68ff45b5e81f)
+
+
 
 Create mount points on /mnt directory for the logical volumes as follow:
 
@@ -62,6 +75,9 @@ Mount lv-apps on /mnt/apps – To be used by webservers
 Mount lv-logs on /mnt/logs – To be used by webserver logs
 
 Mount lv-opt on /mnt/opt – To be used by Jenkins server in Project 8
+
+![mounting the LVs on the directory created](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/846c409f-51fe-46c4-86f7-fb24112cea0b)
+
 
 
 Install NFS server, configure it to start on reboot and make sure it is up and running
@@ -76,9 +92,15 @@ Install NFS server, configure it to start on reboot and make sure it is up and r
 
 `sudo systemctl status nfs-server.service`
 
+![install NFS client](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/3088ef15-1585-4da9-8bcd-fb02f4092aa4)
+
+
 Export the mounts for webservers’ subnet cidr to connect as clients. For simplicity, you will install your all three Web Servers inside the same subnet, but in production set up you would probably want to separate each tier inside its own subnet for higher level of security.
 
 To check your subnet cidr – open your EC2 details in AWS web console and locate ‘Networking’ tab and open a Subnet link:
+
+![getting the subnet CIDR of webserver1](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/42efd1b8-e9b1-4f99-8a97-5c58b36d63ae)
+
 
 Make sure we set up permission that will allow our Web servers to read, write and execute files on NFS:
 
@@ -96,6 +118,9 @@ Make sure we set up permission that will allow our Web servers to read, write an
 
 `sudo systemctl restart nfs-server.service`
 
+![setting up permisson to allow webserver read write execute](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/49ba1271-bae9-472d-b4d6-03e2b7c1cb29)
+
+
 Configure access to NFS for clients within the same subnet (example of Subnet CIDR – 172.31.32.0/20 ):
 
 
@@ -107,6 +132,9 @@ Configure access to NFS for clients within the same subnet (example of Subnet CI
 
 Esc + :wq!
 
+![VI into etc exports to configure access to NFS for clients within the same subnet](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/7a343287-6021-4971-adb6-262af46be889)
+
+
 `sudo exportfs -arv`
 
 Check which port is used by NFS and open it using Security Groups (add new Inbound Rule)
@@ -114,6 +142,8 @@ Check which port is used by NFS and open it using Security Groups (add new Inbou
 `rpcinfo -p | grep nfs`
 
  In order for NFS server to be accessible from your client, you must also open following ports: TCP 111, UDP 111, UDP 2049
+
+![edit inbound rule for TCP and UDP](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/948151f4-e9bb-4e3b-8b66-048f1d1e34e6)
 
 
 ## Step 2: Configure the Database Server
@@ -130,6 +160,9 @@ Create a database and name it tooling
 Create a database user and name it webaccess
 
 Grant permission to webaccess user on tooling database to do anything only from the webservers subnet cidr
+
+![show database use tooling show tables show users](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/134e0f12-80cf-4fc7-8019-74bb18e4ba33)
+
 
 
 ## Step 3: Prepare the Web Servers
@@ -157,6 +190,11 @@ Mount /var/www/ and target the NFS server’s export for apps
 `sudo mkdir /var/www`
 
 `sudo mount -t nfs -o rw,nosuid <NFS-Server-Private-IP-Address>:/mnt/apps /var/www`
+
+![make directory for mount point](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8f24f825-0e30-4897-af70-83c78ba29cc8)
+
+![mkdir var www and mount NFS target for mnt apps](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/868110de-2d2a-4202-ae68-a3e5e8a937f0)
+
 
 Verify that NFS was mounted successfully by running df -h. Make sure that the changes will persist on Web Server after reboot:
 
@@ -191,6 +229,9 @@ Install Remi’s repository, Apache and PHP
 
 Repeat steps 1-5 for another 2 Web Servers.
 
+![install RemiRepo Apache and PHP](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/0efd963b-784c-4ab9-b966-2e03c2a14521)
+
+
 
 Verify that Apache files and directories are available on the Web Server in /var/www and also on the NFS server in /mnt/apps. If you see the same files – it means NFS is mounted correctly. You can try to create a new file touch test.txt from one server and check if the same file is accessible from other Web Servers.
 
@@ -198,6 +239,10 @@ Verify that Apache files and directories are available on the Web Server in /var
 
 
 Locate the log folder for Apache on the Web Server and mount it to NFS server’s export for logs. Repeat step №4 to make sure the mount point will persist after reboot.
+
+![Locate the log folder for Apache on the Web Server and mount it to NFS server’s export for logs](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/17d6d7da-c359-401e-b1cd-cb26460ab739)
+
+![make sure mount point for apache on webserver persists](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/ff6d68f4-4f17-4307-bd7c-2edc85d53955)
 
 Fork the tooling source code from Darey.io Github Account to your Github account.
 
@@ -211,13 +256,21 @@ Deploy the tooling website’s code to the Webserver. Ensure that the html folde
 
  Do not forget to open TCP port 80 on the Web Server.
 
+ ![open http port 80 on web server](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/c5f18cfe-7e30-4f70-90ac-44e25455bc02)
+
+
 If you encounter 403 Error – check permissions to your /var/www/html folder and also disable SELinux sudo setenforce 0
 To make this change permanent – open following config file sudo vi /etc/sysconfig/selinux and set SELINUX=disabledthen restrt httpd.
 
 ![disable selinux](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/0f0037e8-5e12-46de-82e1-be3660b901af)
 
 
-Update the website’s configuration to connect to the database (in /var/www/html/functions.php file). Apply tooling-db.sql script to your database using this command mysql -h <databse-private-ip> -u <db-username> -p <db-pasword> < tooling-db.sql
+Update the website’s configuration to connect to the database (in /var/www/html/functions.php file).
+
+![uisng vi to update website configuration to connect to DB](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/fbcae4f2-4bf1-4c9e-a3f2-410fee1716f7)
+
+
+Apply tooling-db.sql script to your database using this command mysql -h <databse-private-ip> -u <db-username> -p <db-pasword> < tooling-db.sql
 
 ![apply tooling script to database using command mysql -h -u](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4116a0b1-988b-4737-9ba2-4a76b5126785)
 
@@ -230,6 +283,8 @@ INSERT INTO ‘users’ (‘id’, ‘username’, ‘password’, ’email’, 
 -> (1, ‘myuser’, ‘5f4dcc3b5aa765d61d8327deb882cf99’, ‘user@mail.com’, ‘admin’, ‘1’);
 
 Open the website in your browser http://<Web-Server-Public-IP-Address-or-Public-DNS-Name>/index.php and make sure you can login into the website with myuser user.
+
+![webserver1 serving php](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/e39e7010-8464-437a-9269-012a55ec5806)
 
 
 
