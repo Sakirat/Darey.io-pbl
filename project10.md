@@ -87,6 +87,7 @@ Restart Nginx and make sure the service is up and running
 
 `sudo systemctl status nginx`
 
+
 ## REGISTER A NEW DOMAIN NAME AND CONFIGURE SECURED CONNECTION USING SSL/TLS CERTIFICATES
 
 Let us make necessary configurations to make connections to our Tooling Web Solution secured!
@@ -111,6 +112,8 @@ Update A record in your registrar to point to Nginx LB using Elastic IP address
 
 Check that your Web Servers can be reached from your browser using new domain name using HTTP protocol – http://<your-domain-name.com>
 
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/04eab50a-7e00-4848-8326-934b020aad70)
+
 Configure Nginx to recognize your new domain name
 
 Update your nginx.conf with server_name www.<your-domain-name.com> instead of server_name www.domain.com
@@ -125,15 +128,24 @@ Install certbot
 
 `sudo snap install --classic certbot`
 
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/348066ed-09c9-4f7a-9062-54611c2fc8d1)
+
+
 Request your certificate (just follow the certbot instructions – you will need to choose which domain you want your certificate to be issued for, domain name will be looked up from nginx.conf file so make sure you have updated it on step 4).
 
 `sudo ln -s /snap/bin/certbot /usr/bin/certbot`
 
 `sudo certbot --nginx`
 
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/de385ed5-d1a9-4a4f-8b6e-bfabb02d9412)
+
+
 Test secured access to your Web Solution by trying to reach https://<your-domain-name.com>
 
 You shall be able to access your website by using HTTPS protocol (that uses TCP port 443) and see a padlock pictogram in your browser’s search string.
+
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/f4cd14a6-f2bb-4bc9-8809-2f669f7ef8a4)
+
 
 Click on the padlock icon and you can see the details of the certificate issued for your website.  
 
@@ -145,15 +157,23 @@ You can test renewal command in dry-run mode
 
 `sudo certbot renew --dry-run`
 
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/2773d8d7-405c-42dd-98a0-f3f42ddd460c)
+
+
 Best practice is to have a scheduled job than to run renew command periodically. Let us configure a cronjob to run the command twice a day.
 
 To do so, lets edit the crontab file with the following command:
 
 `crontab -e`
 
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/115783cf-a4e3-482b-9ea0-1b4197bffcdb)
+
+
 Add following line:
 
 `* */12 * * *   root /usr/bin/certbot renew > /dev/null 2>&1`
+
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/eda32c46-6577-4b70-a1b6-67b89b8c704d)
 
 You can always change the interval of this cronjob if twice a day is too often by adjusting schedule expression.
 
