@@ -210,6 +210,8 @@ To make sure that the files in /mnt/apps have been updated – connect via SSH/P
 
 ![cat readme md](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/e35d5625-4089-4f11-8efb-589184a7a0f1)
 
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/f9f83adb-8d26-4415-9614-b21ed20e8e1f)
+
 
 If you see the changes you had previously made in your GitHub – the job works as expected.
 
