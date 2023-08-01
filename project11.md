@@ -14,6 +14,7 @@ On the diagram below the Virtual Private Network (VPC) is divided into two subne
 
 ![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/efe0485c-3f36-4ffe-a6eb-659371cc7e36)
 
+
 ## INSTALL AND CONFIGURE ANSIBLE ON EC2 INSTANCE
 
 Update Name tag on your Jenkins EC2 Instance to Jenkins-Ansible. We will use this server to run playbooks.
