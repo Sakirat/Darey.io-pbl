@@ -17,11 +17,18 @@ Change permissions to this directory, so Jenkins could save files there
 
 `chmod -R 0777 /home/ubuntu/ansible-config-artifact`
 
+![initial starting codes](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/5db7819d-9fd6-4a84-bedb-459838fb9eab)
+
+
 Go to Jenkins web console -> Manage Jenkins -> Manage Plugins -> on Available tab search for Copy Artifact and install this plugin without restarting Jenkins
 
 Create a new Freestyle project (you have done it in Project 9) and name it save_artifacts.
 
 This project will be triggered by completion of your existing ansible project. Configure it accordingly:
+
+![job triggered on Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/f6214e2e-73bd-429d-b1f1-45e55bc73ee1)
+
+![jenkins console output on ansible](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/2ddf6aa0-99c6-41cc-9b83-8e2f226c3e48)
 
  You can configure number of builds to keep in order to save space on the server, for example, you might want to keep only last 2 or 5 build results. You can also make this change to your ansible job.
 
@@ -30,11 +37,15 @@ This project will be triggered by completion of your existing ansible project. C
  Test your set up by making some change in README.MD file inside your ansible-config-mgt repository (right inside master branch).
 If both Jenkins jobs have completed one after another – you shall see your files inside /home/ubuntu/ansible-config-artifact directory and it will be updated with every commit to your master branch.
 
+![project save artifacts successful build](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/28e05097-0829-411f-9757-76cce7362fd6)
+
 Now your Jenkins pipeline is more neat and clean.
 
 ### STEP 2: REFACTOR ANSIBLE CODE BY IMPORTING OTHER PLAYBOOKS INTO SITE.YML
 
 Before starting to refactor the codes, ensure that you have pulled down the latest code from master (main) branch, and created a new branch, name it refactor.
+
+![git checkout new branch refactor](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/05fef990-78b6-409c-a390-409a6785480e)
 
 DevOps philosophy implies constant iterative improvement for better efficiency – refactoring is one of the techniques that can be used, but you always have an answer to question "why?". Why do we need to change something if it works well?
 
@@ -49,6 +60,8 @@ Within playbooks folder, create a new file and name it site.yml – This file wi
 Create a new folder in root of the repository and name it static-assignments. The static-assignments folder is where all other children playbooks will be stored. This is merely for easy organization of your work. It is not an Ansible specific concept, therefore you can choose how you want to organize your work. You will see why the folder name has a prefix of static very soon. For now, just follow along.
 
 Move common.yml file into the newly created static-assignments folder.
+
+![move common to static](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/821c6087-c64d-46e1-ad5c-f22138f80e32)
 
 Inside site.yml file, import common.yml playbook.
 
@@ -69,8 +82,12 @@ The code above uses built in import_playbook Ansible module. Your folder structu
     └── site.yml
 
 Run ansible-playbook command against the dev environment
-Since you need to apply some tasks to your dev servers and wireshark is already installed – you can go ahead and create another playbook under static-assignments and name it common-del.yml. In this playbook, configure deletion of wireshark utility.
+Since you need to apply some tasks to your dev servers and wireshark is already installed – you can go ahead and create another playbook under static-assignments and name it common-del.yml. 
 
+![updating common to common-del in site yml](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/e4b9bfc2-0c7a-45a5-af3f-f3a2f9b01791)
+
+
+In this playbook, configure deletion of wireshark utility.
 
 ---
 - name: update web, nfs and db servers
@@ -98,6 +115,8 @@ Since you need to apply some tasks to your dev servers and wireshark is already 
       purge: yes
       autoclean: yes
 
+    ![updating the wireshark deletion](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/bfa9daa6-043c-4af6-9aad-940bdfb0795d)
+
 
    update site.yml with - import_playbook: ../static-assignments/common-del.yml instead of common.yml and run it against dev servers:
 
@@ -113,6 +132,8 @@ We have our nice and clean dev environment, so let us put it aside and configure
 
 Launch 2 fresh EC2 instances using RHEL 8 image, we will use them as our uat servers, so give them names accordingly – Web1-UAT and Web2-UAT.
 Tip: Do not forget to stop EC2 instances that you are not using at the moment to avoid paying extra. For now, you only need 2 new RHEL 8 servers as Web Servers and 1 existing Jenkins-Ansible server up and running.
+
+![set up 2 new instances web1 web2 UAT](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8800f3f7-d2b0-4117-939c-db2f146c01bc)
 
 To create a role, you must create a directory called roles/, relative to the playbook file or in /etc/ansible/ directory.
 There are two ways how you can create this folder structure:
@@ -168,7 +189,12 @@ Update your inventory ansible-config-mgt/inventory/uat.yml file with IP addresse
 
 <Web2-UAT-Server-Private-IP-Address> ansible_ssh_user='ec2-user' 
 
+![update the UAT yml file with web1 and web2 ip addresses](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/6b0ece14-3c47-4824-a5d9-55df698f4a44)
+
+
 In /etc/ansible/ansible.cfg file uncomment roles_path string and provide a full path to your roles directory roles_path    = /home/ubuntu/ansible-config-mgt/roles, so Ansible could know where to find configured roles.
+
+![sudo vi etc ansible config roles](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/c2e41f57-4894-480c-8622-97d666d79125)
 
 It is time to start adding some logic to the webserver role. Go into tasks directory, and within the main.yml file, start writing configuration tasks to do the following:
 
@@ -214,10 +240,16 @@ Your main.yml may consist of following tasks
     path: /var/www/html/html
     state: absent
 
+  ![install apache clone tooling website](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/425fedbb-902f-495d-be7a-d7335812ef1a)
+
+
   
 ### Step 4 – Reference ‘Webserver’ role
 
 Within the static-assignments folder, create a new assignment for uat-webservers uat-webservers.yml. This is where you will reference the role.
+
+![in static assignment create new assignment](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/d0e5a693-73b3-400d-a395-ef2d70cc1de8)
+
 
 ---
 - hosts: uat-webservers
@@ -237,6 +269,11 @@ Remember that the entry point to our ansible configuration is the site.yml file.
 
 Commit your changes, create a Pull Request and merge them to master branch, make sure webhook triggered two consequent Jenkins jobs, they ran successfully and copied all the files to your Jenkins-Ansible server into /home/ubuntu/ansible-config-mgt/ directory.
 Now run the playbook against your uat inventory and see what happens:
+
+![merging changes to main branch](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/b4dd3d87-77d6-4fd4-b6f5-4920ed55ffe9)
+
+![pull request successfully merged and closed on github](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/a3d534b2-c422-4480-9cb9-dd5b4d3627e8)
+
 
 You should be able to see both of your UAT Web servers configured and you can try to reach them from your browser:
 
