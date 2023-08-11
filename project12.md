@@ -57,11 +57,16 @@ Let see code re-use in action by importing other playbooks.
 
 Within playbooks folder, create a new file and name it site.yml – This file will now be considered as an entry point into the entire infrastructure configuration. Other playbooks will be included here as a reference. In other words, site.yml will become a parent to all other playbooks that will be developed. Including common.yml that you created previously. Dont worry, you will understand more what this means shortly.
 
+![creating site yml inside the playbook folder](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4fd2890e-2e57-465d-816e-18e04942392f)
+
+
 Create a new folder in root of the repository and name it static-assignments. The static-assignments folder is where all other children playbooks will be stored. This is merely for easy organization of your work. It is not an Ansible specific concept, therefore you can choose how you want to organize your work. You will see why the folder name has a prefix of static very soon. For now, just follow along.
 
 Move common.yml file into the newly created static-assignments folder.
 
 ![move common to static](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/821c6087-c64d-46e1-ad5c-f22138f80e32)
+
+![import common yml playbook to static to have the 5 enviroments](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/9c04f8e2-1a26-4d95-adda-169cb8bf5464)
 
 Inside site.yml file, import common.yml playbook.
 
@@ -182,6 +187,10 @@ After removing unnecessary directories and files, the roles structure should loo
     │   └── main.yml
     └── templates
 
+
+    ![creating the files and folders in webserver](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/0ce87443-f923-4ef7-ad2a-9972d057be72)
+
+
 Update your inventory ansible-config-mgt/inventory/uat.yml file with IP addresses of your 2 UAT Web servers. Ensure you are using ssh-agent to ssh into the Jenkins-Ansible instance just as you have done in project 11;
 
   [uat-webservers]
@@ -271,6 +280,9 @@ Commit your changes, create a Pull Request and merge them to master branch, make
 Now run the playbook against your uat inventory and see what happens:
 
 ![merging changes to main branch](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/b4dd3d87-77d6-4fd4-b6f5-4920ed55ffe9)
+
+![confirm changes to refactor branch reflects on github](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8ce718d7-74d4-4ef3-a383-c2003a0e3752)
+
 
 ![pull request successfully merged and closed on github](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/a3d534b2-c422-4480-9cb9-dd5b4d3627e8)
 
