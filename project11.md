@@ -279,6 +279,9 @@ Now, it is time to execute ansible-playbook command and verify if your playbook 
 ![running first ansible test](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/a3466fc0-cdd3-4088-a6e9-a338aa5368da)
 
 
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/370a7f16-6713-4ecb-b079-ae6d47c3bdc1)
+
+
 You can go to each of the servers and check if wireshark has been installed by running 
 
 `which wireshark`
