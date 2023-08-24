@@ -14,6 +14,7 @@ Well, from Project 12, you can already tell that static assignments use import A
 Hence,
 
 import = Static
+
 include = Dynamic
 
 When the import module is used, all statements are pre-processed at the time playbooks are parsed. Meaning, when you execute site.yml playbook, Ansible will process all the playbooks referenced during the time it is parsing the statements. This also means that, during actual execution, if any statement changes, such statements will not be considered. Hence, it is static.
