@@ -478,3 +478,408 @@ You should now see a Plot menu item on the left menu. Click on it to see the cha
 
 Bundle the application code for into an artifact (archived package) upload to Artifactory
 
+stage ('Package Artifact') {
+    steps {
+            sh 'zip -qr php-todo.zip ${WORKSPACE}/*'
+     }
+    }
+
+  Publish the resulted artifact into Artifactory
+
+  stage ('Upload Artifact to Artifactory') {
+          steps {
+            script { 
+                 def server = Artifactory.server 'artifactory-server'                 
+                 def uploadSpec = """{
+                    "files": [
+                      {
+                       "pattern": "php-todo.zip",
+                       "target": "<name-of-artifact-repository>/php-todo",
+                       "props": "type=zip;status=ready"
+
+                       }
+                    ]
+                 }""" 
+
+                 server.upload spec: uploadSpec
+               }
+            }
+
+        }
+
+Deploy the application to the dev environment by launching Ansible pipeline
+
+stage ('Deploy to Dev Environment') {
+    steps {
+    build job: 'ansible-project/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
+    }
+  }
+
+The build job used in this step tells Jenkins to start another job. In this case it is the ansible-project job, and we are targeting the main branch. Hence, we have ansible-project/main. Since the Ansible project requires parameters to be passed in, we have included this by specifying the parameters section. The name of the parameter is env and its value is dev. Meaning, deploy to the Development environment.
+
+But how are we certain that the code being deployed has the quality that meets corporate and customer requirements? Even though we have implemented Unit Tests and Code Coverage Analysis with phpunit and phploc, we still need to implement Quality Gate to ensure that ONLY code with the required code coverage, and other quality standards make it through to the environments.
+
+To achieve this, we need to configure SonarQube – An open-source platform developed by SonarSource for continuous inspection of code quality to perform automatic reviews with static analysis of code to detect bugs, code smells, and security vulnerabilities.
+
+### SONARQUBE INSTALLATION
+
+Before we start getting hands on with SonarQube configuration, it is incredibly important to understand a few concepts:
+
+Software Quality – The degree to which a software component, system or process meets specified requirements based on user needs and expectations.
+
+Software Quality Gates – Quality gates are basically acceptance criteria which are usually presented as a set of predefined quality criteria that a software development project must meet in order to proceed from one stage of its lifecycle to the next one.
+
+SonarQube is a tool that can be used to create quality gates for software projects, and the ultimate goal is to be able to ship only quality software code.
+
+Despite that DevOps CI/CD pipeline helps with fast software delivery, it is of the same importance to ensure the quality of such delivery. Hence, we will need SonarQube to set up Quality gates. In this project we will use predefined Quality Gates (also known as The Sonar Way). Software testers and developers would normally work with project leads and architects to create custom quality gates.
+
+Install SonarQube on Ubuntu 20.04 With PostgreSQL as Backend Database
+
+CONFIGURE SONARQUBE
+
+We cannot run SonarQube as a root user, if you run using root user it will stop automatically. The ideal approach will be to create a separate group and a user to run SonarQube
+
+Access SonarQube
+
+To access SonarQube using browser, type server’s IP address followed by port 9000
+
+http://server_IP:9000 OR http://localhost:9000
+
+Login to SonarQube with default administrator username and password – admin
+
+Now, when SonarQube is up and running, it is time to setup our Quality gate in Jenkins.
+
+### CONFIGURE SONARQUBE AND JENKINS FOR QUALITY GATE
+
+In Jenkins, install SonarScanner plugin
+
+Navigate to configure system in Jenkins. Add SonarQube server as shown below:
+
+  Manage Jenkins > Configure System
+
+  Generate authentication token in SonarQube
+
+ User > My Account > Security > Generate Tokens
+
+ Configure Quality Gate Jenkins Webhook in SonarQube – The URL should point to your Jenkins server http://{JENKINS_HOST}/sonarqube-webhook/
+
+Administration > Configuration > Webhooks > Create
+
+Setup SonarQube scanner from Jenkins – Global Tool Configuration
+
+Manage Jenkins > Global Tool Configuration
+
+Update Jenkins Pipeline to include SonarQube scanning and Quality Gate
+
+Below is the snippet for a Quality Gate stage in Jenkinsfile.
+
+stage('SonarQube Quality Gate') {
+        environment {
+            scannerHome = tool 'SonarQubeScanner'
+        }
+        steps {
+            withSonarQubeEnv('sonarqube') {
+                sh "${scannerHome}/bin/sonar-scanner"
+            }
+
+        }
+    }
+
+   NOTE: The above step will fail because we have not updated `sonar-scanner.properties
+
+Configure sonar-scanner.properties – From the step above, Jenkins will install the scanner tool on the Linux server. You will need to go into the tools directory on the server to configure the properties file in which SonarQube will require to function during pipeline execution. 
+
+`cd /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/conf/`
+
+Open sonar-scanner.properties file
+
+`sudo vi sonar-scanner.properties`
+
+Add configuration related to php-todo project
+
+sonar.host.url=http://<SonarQube-Server-IP-address>:9000
+sonar.projectKey=php-todo
+#----- Default source code encoding
+sonar.sourceEncoding=UTF-8
+sonar.php.exclusions=**/vendor/**
+sonar.php.coverage.reportPaths=build/logs/clover.xml
+sonar.php.tests.reportPath=build/logs/junit.xml
+
+HINT: To know what exactly to put inside the sonar-scanner.properties file, SonarQube has a configurations page where you can get some directions.
+
+A brief explanation of what is going on the the stage – set the environment variable for the scannerHome use the same name used when you configured SonarQube Scanner from Jenkins Global Tool Configuration. If you remember, the name was SonarQubeScanner. Then, within the steps use shell to run the scanner from bin directory.
+
+To further examine the configuration of the scanner tool on the Jenkins server – navigate into the tools directory
+
+ ASSIGNMENTS (INCLUDE) AND COMMUNITY ROLES
+Ansible dynamic assignments (include) and community roles
+Introducing dynamic assignment into our structure
+Update site.yml with dynamic assignments
+Load balancer roles
+(STEP 24) PROJECT 14 EXPERIENCE CONTINUOUS INTEGRATION WITH JENKINS | ANSIBLE | ARTIFACTORY | SONARQUBE | PHP
+Experience continuous integration with jenkins | ansible | artifactory | sonarqube | php
+Why are we doing everything we are doing? – 13 devops success metrics
+Simulating a typical ci/cd pipeline for a php based application
+Ansible roles for ci environment
+Running ansible playbook from jenkins
+Ci/cd pipeline for todo application
+Sonarqube installation
+Configure sonarqube
+Configure sonarqube and jenkins for quality gate
+(STEP 26) PROJECT 15 AWS CLOUD SOLUTION FOR 2 COMPANY WEBSITES USING A REVERSE PROXY TECHNOLOGY
+Aws cloud solution for 2 company websites using a reverse proxy technology
+Set up a virtual private network (vpc)
+Configure application load balancer (alb)
+(STEP 28) PROJECT 16 AUTOMATE INFRASTRUCTURE WITH IAC USING TERRAFORM PART 1
+Automate infrastructure with iac using terraform part 1
+Vpc | subnets | security groups
+Fixing the problems by code refactoring
+Introducing variables.tf & terraform.tfvars
+(STEP 29) PROJECT 17 AUTOMATE INFRASTRUCTURE WITH IAC USING TERRAFORM PART 2
+Automate infrastructure with iac using terraform. part 2
+Aws routes
+Create security groups
+Create certificate from amazon cerificate manager
+Creating austoaling groups
+Storage and database
+(STEP 30) PROJECT 18 : AUTOMATE INFRASTRUCTURE WITH IAC USING TERRAFORM-PART 3
+Automate infrastructure with iac using terraform. part 3 – refactoring
+When to use workspaces or directory?
+Refactor your project using modules
+Complete the terraform configuration
+(STEP 33) PROJECT 19: AUTOMATE INFRASTRUCTURE WITH IAC USING TERRAFORM. PART 4 - TERRAFORM CLOUD
+Automate infrastructure with iac using terraform. part 4 – terraform cloud
+(STEP 34) PROJECT 20: MIGRATION TO THE СLOUD WITH CONTAINERIZATION. PART 1 - DOCKER & DOCKER COMPOSE
+Migration to the сloud with containerization. part 1 – docker & docker compose
+Connecting to the mysql docker container
+Practice task
+(STEP 35) PROJECT 21: ORCHESTRATING CONTAINERS ACROSS MULTIPLE VIRTUAL SERVERS WITH KUBERNETES. PART 1
+Orchestrating containers across multiple virtual servers with kubernetes. part 1
+Kubernetes architecture
+Step 0-install client tools before bootstrapping the cluster.
+Aws cloud resources for kubernetes cluster
+Security groups
+Step 2 – create compute resources
+Step 3 prepare the self-signed certificate authority and generate tls certificates
+Step 4 – distributing the client and server certificates
+Step 5 use `kubectl` to generate kubernetes configuration files for authentication
+Step 6 prepare the etcd database for encryption at rest.
+Bootstrap the control plane
+Test that everything is working fine
+Configuring the kubernetes worker nodes
+Quick overview of kubernetes network policy and how it is implemented
+Configure the worker nodes components
+Final steps
+(STEP 36): PROJECT 22: DEPLOYING APPLICATIONS INTO KUBERNETES CLUSTER
+Deploying applications into kubernetes cluster
+Understanding the concept
+Common kubernetes objects
+Accessing the app from the browser
+Create a replica set
+Using aws load balancer to access your service in kubernetes.
+Using deployment controllers
+Persisting data for pods
+(STEP 37): PROJECT 23: PERSISTING DATA IN KUBERNETES
+Persisting data in kubernetes
+Managing volumes dynamically with pvs and pvcs
+Configmap
+(STEP 38): PROJECT 24: BUILDING ELASTIC KUBERNETES SERVICE (EKS) WITH TERRAFORM
+Building elastic kubernetes service (eks) with terraform
+Building elastic kubernetes service (eks) with terraform – part 2
+Fixing the error
+Deploy applications with helm
+Deploy jenkins with helm
+Quick task for you
+(STEP 39): PROJECT 25: DEPLOYING AND PACKAGING APPLICATIONS INTO KUBERNETES
+Configuring ingress for tls
+Deploying cert-manager and managing tls/ssl for ingress
+Deploying ingress controller and managing ingress resources
+Deploying and packaging applications into kubernetes with helm
+(STEP 40): PROJECT 26: RESERVED FOR MASTER CLASS
+Setting up private repositories and preparing ci pipelines with jenkins
+(STEP 41): PROJECT 27: RESERVED FOR MASTER CLASS
+Project 27
+(STEP 42): PROJECT 28: RESERVED FOR MASTER CLASS
+Project 28
+(STEP 43): PROJECT 29: RESERVED FOR MASTER CLASS
+Project 29
+(STEP 48): PROJECT 30: RESERVED FOR MASTER CLASS
+Project 30
+Projects
+Projects
+Docs
+(STEP 24) Project 14 Experience Continuous Integration With Jenkins | Ansible | Artifactory | Sonarqube | PHP
+CONFIGURE SONARQUBE AND JENKINS FOR QUALITY GATE
+In Jenkins, install SonarScanner plugin
+
+Navigate to configure system in Jenkins. Add SonarQube server as shown below:
+
+  Manage Jenkins > Configure System
+
+
+
+Generate authentication token in SonarQube
+
+ User > My Account > Security > Generate Tokens
+
+
+
+Configure Quality Gate Jenkins Webhook in SonarQube – The URL should point to your Jenkins server http://{JENKINS_HOST}/sonarqube-webhook/
+
+Administration > Configuration > Webhooks > Create
+
+
+
+Setup SonarQube scanner from Jenkins – Global Tool Configuration
+
+Manage Jenkins > Global Tool Configuration
+
+
+
+Update Jenkins Pipeline to include SonarQube scanning and Quality Gate
+Below is the snippet for a Quality Gate stage in Jenkinsfile.
+
+    stage('SonarQube Quality Gate') {
+        environment {
+            scannerHome = tool 'SonarQubeScanner'
+        }
+        steps {
+            withSonarQubeEnv('sonarqube') {
+                sh "${scannerHome}/bin/sonar-scanner"
+            }
+
+        }
+    }
+NOTE: The above step will fail because we have not updated `sonar-scanner.properties
+
+Configure sonar-scanner.properties – From the step above, Jenkins will install the scanner tool on the Linux server. You will need to go into the tools directory on the server to configure the properties file in which SonarQube will require to function during pipeline execution.
+cd /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/conf/
+Open sonar-scanner.properties file
+
+sudo vi sonar-scanner.properties
+Add configuration related to php-todo project
+
+sonar.host.url=http://<SonarQube-Server-IP-address>:9000
+sonar.projectKey=php-todo
+#----- Default source code encoding
+sonar.sourceEncoding=UTF-8
+sonar.php.exclusions=**/vendor/**
+sonar.php.coverage.reportPaths=build/logs/clover.xml
+sonar.php.tests.reportPath=build/logs/junit.xml
+HINT: To know what exactly to put inside the sonar-scanner.properties file, SonarQube has a configurations page where you can get some directions.
+
+
+
+A brief explanation of what is going on the the stage – set the environment variable for the scannerHome use the same name used when you configured SonarQube Scanner from Jenkins Global Tool Configuration. If you remember, the name was SonarQubeScanner. Then, within the steps use shell to run the scanner from bin directory.
+
+To further examine the configuration of the scanner tool on the Jenkins server – navigate into the tools directory
+
+`cd /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/bin`
+
+ist the content to see the scanner tool sonar-scanner. That is what we are calling in the pipeline script.
+
+Output of ls -latr
+
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/6fda3d50-aebf-4366-a03c-b031560506a9)
+
+So far you have been given code snippets on each of the stages within the Jenkinsfile. But, you should also be able to generate Jenkins configuration code yourself.
+
+To generate Jenkins code, navigate to the dashboard for the php-todo pipeline and click on the Pipeline Syntax menu item
+
+Dashboard > php-todo > Pipeline Syntax 
+
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8fa8ba14-4716-4260-8cba-31d592e9a51f)
+
+Click on Steps and select withSonarQubeEnv – This appears in the list because of the previous SonarQube configurations you have done in Jenkins. Otherwise, it would not be there.
+
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/ad326858-0a6a-44ef-8f7c-c7ca59711e25)
+
+Within the generated block, you will use the sh command to run shell on the server. For more advanced usage in other projects, you can add to bookmarks this SonarQube documentation page in your browser.
+
+## End-to-End Pipeline Overview
+
+Indeed, this has been one of the longest projects from Project 1, and if everything has worked out for you so far, you should have a view like below:
+
+
+But we are not completely done yet!
+
+The quality gate we just included has no effect. Why? Well, because if you go to the SonarQube UI, you will realise that we just pushed a poor-quality code onto the development environment.
+
+Navigate to php-todo project in SonarQube
+
+There are bugs, and there is 0.0% code coverage. (code coverage is a percentage of unit tests added by developers to test functions and objects in the code)
+
+If you click on php-todo project for further analysis, you will see that there is 6 hours’ worth of technical debt, code smells and security issues in the code.
+
+In the development environment, this is acceptable as developers will need to keep iterating over their code towards perfection. But as a DevOps engineer working on the pipeline, we must ensure that the quality gate step causes the pipeline to fail if the conditions for quality are not met.
+
+### Conditionally deploy to higher environments
+
+In the real world, developers will work on feature branch in a repository (e.g., GitHub or GitLab). There are other branches that will be used differently to control how software releases are done. You will see such branches as:
+
+Develop
+
+Master or Main
+(The * is a place holder for a version number, Jira Ticket name or some description. It can be something like Release-1.0.0)
+
+Feature/*
+
+Release/*
+
+Hotfix/*
+
+etc.
+
+There is a very wide discussion around release strategy, and git branching strategies which in recent years are considered under what is known as GitFlow 
+
+Assuming a basic gitflow implementation restricts only the develop branch to deploy code to Integration environment like sit.
+
+Let us update our Jenkinsfile to implement this:
+
+First, we will include a When condition to run Quality Gate whenever the running branch is either develop, hotfix, release, main, or master
+
+when { branch pattern: "^develop*|^hotfix*|^release*|^main*", comparator: "REGEXP"}
+
+ timeout(time: 1, unit: 'MINUTES') {
+        waitForQualityGate abortPipeline: true
+    }
+
+The complete stage will now look like this:
+
+ stage('SonarQube Quality Gate') {
+      when { branch pattern: "^develop*|^hotfix*|^release*|^main*", comparator: "REGEXP"}
+        environment {
+            scannerHome = tool 'SonarQubeScanner'
+        }
+        steps {
+            withSonarQubeEnv('sonarqube') {
+                sh "${scannerHome}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
+            }
+            timeout(time: 1, unit: 'MINUTES') {
+                waitForQualityGate abortPipeline: true
+            }
+        }
+    }
+
+To test, create different branches and push to GitHub. You will realise that only branches other than develop, hotfix, release, main, or master will be able to deploy the code.
+
+If everything goes well, you should be able to see something like this:
+
+ Notice that with the current state of the code, it cannot be deployed to Integration environments due to its quality. In the real world, DevOps engineers will push this back to developers to work on the code further, based on SonarQube quality report. Once everything is good with code quality, the pipeline will pass and proceed with sipping the codes further to a higher environment.
+
+Complete the following tasks to finish Project 14
+
+Introduce Jenkins agents – Add 2 more servers to be used as Jenkins agent. Configure Jenkins to run its pipeline jobs randomly on any available agent nodes.
+
+Configure webhook between Jenkins and GitHub to automatically run the pipeline when there is a code push.   
+
+Deploy the application to all the environments
+
+Optional – Experience pentesting in pentest environment by configuring Wireshark there and just explore for information sake only. Watch Wireshark Tutorial here
+
+Ansible Role for Wireshark:
+
+https://github.com/ymajik/ansible-role-wireshark (Ubuntu)
+https://github.com/wtanaka/ansible-role-wireshark (RedHat)
+
+Congratulations! You have just experienced one of the most interesting and complex projects in you Project Based Learning journey so far.
