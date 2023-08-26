@@ -10,6 +10,7 @@ Some other programs written languages such as PHP, JavaScript or Python work dir
 In this project, you will understand and get hands on experience around the entire concept around CI/CD from applications perspective. To fully gain real expertise around this idea, it is best to see it in action across different programming languages and from the platform perspective too. From the application perspective, we will be focusing on PHP here; there are more projects ahead that are based on Java, Node.js, .Net and Python. By the time you start working on Terraform, Docker and Kubernetes projects, you will get to see the platform perspective of CI/CD in action.
 
 What is Continuous Integration?
+
 In software engineering, Continuous Integration (CI) is a practice of merging all developers’ working copies to a shared mainline (e.g., Git Repository or some other version control system) several times per day. Frequent merges reduce chances of any conflicts in code and allow to run tests more often to avoid massive rework if something goes wrong. This principle can be formulated as Commit early, push often.
 
 The general idea behind multiple commits is to avoid what is generally considered as Merge Hell or Integration hell. When a new developer joins a new project, he or she must create a copy of the main codebase by starting a new feature branch from the mainline to develop his own features (in some organization or team, this could be called a develop, main or master branch). If there are tens of developers working on the same project, they will all have their own branches created from mainline at different points in time. Once they make a copy of the repository it starts drifting away from the mainline with every new merge of other developers’ codes. If this lingers on for a very long time without reconciling the code, then this will cause a lot of code conflict or Merge Hell, as rightly said. Imagine such a hell from tens of developers or worse, hundreds. So, the best thing to do, is to continuously commit & push your code to the mainline. As many times as tens times per day. With this practice, you can avoid Merge Hell or Integration hell.
@@ -120,6 +121,44 @@ This is still NOT a cloud-focus project yet. AWS cloud end to end project begins
 
 To minimize the cost of cloud servers, you don not have to create all the servers at once, simply spin up a minimal server set up as you progress through the project implementation and have reached a need for more.
 
+start with the Ansible server (RHEL8 instance)
+
+![1 launch a RHEL8 instance for ansible server](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/a4373436-d83f-4d02-86a3-406a458f9101)
+
+Install Git on the ANSIBLE server
+
+![2 install git on ansible instance](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/69ce0e53-80f8-40de-9076-df5a181781b3)
+
+ clone the ansible config mgt repo to the new ansible instance server
+ 
+![3 clone the ansible config mgt repo to the new ansible instance server](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/5df9a8c6-4263-4893-b820-ce4705ef7f9f)
+
+Install Epel and Remi Repo Release as well as Java
+
+![4 install Java after installing epel release and remi repo release](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/340d2dff-a3c8-4eeb-b044-729329ebdd74)
+
+
+updating bash profile to export java for ease of usage
+
+![5 updating bash profile to export java for ease of usage](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/84c36cc3-60ae-4187-b532-981ce023229e)
+
+
+![6 updating the bash profile](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/d8a31e8b-a49f-48fb-9091-af5c2213854a)
+
+![7 reloading the bash profile](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/5fce8853-c311-449d-9f92-d0434deb2074)
+
+installing Jenkins
+
+![8 installing Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/cda90966-4901-4778-ac29-e82a6c2a0d1a)
+
+![9 start enable and check status of Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/891a6a93-3946-4b1e-b84a-5c5581372a3b)
+
+![10 getting the initial password for Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/5d7d8ec8-751f-4ab1-a0f4-b536e42a441e)
+
+log in to Jenkins on browser using public Ip and password from terminal
+
+![11 log in to Jenkins on browser usinh public Ip and password from terminal](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/d2357d5a-f676-4c77-8cf7-ae730eb75c64)
+
 To get started, we will focus on these environments initially.
 
 Ci
@@ -188,9 +227,17 @@ To do this,
 
 Navigate to Jenkins URL
 
+![11 log in to Jenkins on browser usinh public Ip and password from terminal](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4703f20c-34d4-4797-9ae6-f171736cdb8c)
+
+
 Install & Open Blue Ocean Jenkins Plugin
 
+![12 installing blue ocean plugin on jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4f71c02c-cca0-4fa1-85e0-41e1786b93cf)
+
 Create a new pipeline
+
+![13 open blue ocean to start a new pipeline](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4451587d-d4bf-4c59-af89-735fc25b5ee3)
+
 
 Select GitHub
 
@@ -202,15 +249,24 @@ Copy Access Token
 
 Paste the token and connect
 
+![14 connecting to github with access token generated from github](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/d28d3e46-2398-4c3c-af3a-b2dc0bd6dccf)
+
+
 Create a new Pipeline
 
 At this point you may not have a Jenkinsfile in the Ansible repository, so Blue Ocean will attempt to give you some guidance to create one. But we do not need that. We will rather create one ourselves. So, click on Administration to exit the Blue Ocean console.
 
 Here is our newly created pipeline. It takes the name of your GitHub repository.
 
+![15 connected to ansible config mgt repo](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/ad0c4b27-6d0f-4c65-ba23-297c9efbb5db)
+
+
 #### Let us create our Jenkinsfile
 
 Inside the Ansible project, create a new directory deploy and start a new file Jenkinsfile inside the directory.
+
+![16 creating a new folder called deploy and a file called jenkinsfile](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/9800e820-dd14-412c-b070-6280cb5da1a5)
+
 
 Add the code snippet below to start building the Jenkinsfile gradually. This pipeline currently has just one stage called Build and the only thing we are doing is using the shell script module to echo Building Stage
 
@@ -228,11 +284,22 @@ pipeline {
     }
 }
 
+![17 script inside jenkins file](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/937475f8-4a6c-4227-af0f-3e576962ea83)
+
+Deploy folder reflecting in GitHub repo
+
+![18 Deploy folder reflecting in GitHub repo](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/867d6a01-6eb0-4658-b96c-617a71017ffe)
+
 Now go back into the Ansible pipeline in Jenkins, and select configure
+
+![19 configure ansible config mgt project in jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/9c3c2915-ab46-4143-ab96-1a2dfc8e3ed8)
 
 Scroll down to Build Configuration section and specify the location of the Jenkinsfile at deploy/Jenkinsfile
 
 Back to the pipeline again, this time click "Build now"
+
+![20 click build now again on the ansible config project](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/5a7b56e2-070e-460f-9b98-380f22915b7a)
+
 
 This will trigger a build and you will be able to see the effect of our basic Jenkinsfile configuration by going through the console output of the build.
 
@@ -244,11 +311,17 @@ Select your project
 
 Click on the play button against the branch
 
+![21 build stage successful on blue ocean](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/ce9513e2-0a6f-4917-a953-68681378f27f)
+
+
 Notice that this pipeline is a multibranch one. This means, if there were more than one branch in GitHub, Jenkins would have scanned the repository to discover them all and we would have been able to trigger a build for each branch.
 
 Let us see this in action.
 
 Create a new git branch and name it feature/jenkinspipeline-stages
+
+![22 git checkout to create new branch feature](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/26032de1-b22d-483d-95de-e38579709aa8)
+
 
 Currently we only have the Build stage. Let us add another stage called Test. Paste the code snippet below and push the new changes to GitHub.
 
@@ -274,7 +347,13 @@ pipeline {
     }
 }
 
+
+![23 update jenkinsfile to reflect testing state](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/0855853c-a4b3-436b-a495-cfe79aaa21f5)
+
 To make your new branch show up in Jenkins, we need to tell Jenkins to scan the repository.
+
+![24 scan repo in Jenkins to see new branch created](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/bd2a5646-1b3e-4a3c-9342-fc95b618cfa2)
+
 
 Click on the "Administration" button
 
@@ -284,17 +363,34 @@ Refresh the page and both branches will start building automatically. You can go
 
 In Blue Ocean, you can now see how the Jenkinsfile has caused a new step in the pipeline launch build for the new branch.
 
+![25 confirming testing stage build successfully in the feature branch in blueocean](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/24cf872a-ab3d-4c67-bd62-46c6d9514b5b)
+
 ### A QUICK TASK FOR US!
 
 1. Create a pull request to merge the latest code into the main branch
+![26 pull merged successfully in github](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/57c13976-b3df-4873-ad0f-3da3746fe732)
+
 2. After merging the PR, go back into your terminal and switch into the main branch.
 3. Pull the latest change.
 4. Create a new branch, add more stages into the Jenkins file to simulate below phases. (Just add an echo command like we have in build and test stages)
    1. Package 
    2. Deploy 
    3. Clean up
+
+![27 adding more stages to the jenkinsfile package deploy and cleanup](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/97a7b363-a614-4407-b7f1-31cb966b8464)
+
+![28 running git add git commit and git push on the feature branch](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/29b10ec5-a518-4027-8595-aa558848bd88)
+
 5. Verify in Blue Ocean that all the stages are working, then merge your feature branch to the main branch
+
+![27aa confirming the new stage reflects in blueocean main branch after merging](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/fe36683a-2975-4aca-8c3c-e8c9c1003a94)
+
 6. Eventually, your main branch should have a successful pipeline like this in blue ocean
+
+![29 change reflecting in blue ocean for newly added stages in feature branch](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4e2a67f3-22aa-4b4e-b3aa-aec1bead4f69)
+
+![30 merge feature branch to main](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/efd52a59-dbac-48c2-83d5-043019f50f4b)
+
 
 ### RUNNING ANSIBLE PLAYBOOK FROM JENKINS
 
@@ -302,11 +398,43 @@ Now that you have a broad overview of a typical Jenkins pipeline. Let us get the
 
 Installing Ansible on Jenkins
 
+![31 installing ansible](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/70f19f4a-6719-4e4e-bb58-18a3b9c797ae)
+
+![32 installing dependencies for python3](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/baa46616-eb99-4b54-a6ca-bf3cb36bb227)
+
+![33 installing postgresql from ansible galaxy](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/b2a58105-2b94-4cfd-8462-75354d1f42e7)
+
+
 Installing Ansible plugin in Jenkins UI
+
+![34 install ansible plugin on jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/e1d90bb1-16fe-4a21-93a9-f2f79dba7530)
+
 
 Creating Jenkinsfile from scratch. (Delete all you currently have in there and start all over to get Ansible to run successfully)
 
+![35 new credential setup in Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/d77ff16d-7afb-4be8-8cc0-7eedf89633ed)
+
+![35b global credential created](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/f7ff8cb3-4d49-4452-9037-8529d504a675)
+
+![37 edit pipeline syntax from dashboard ansiblecofmgt to pipelinesyntax](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/2fdb133c-80e9-412a-9df5-34f0f33f5f0b)
+
+![36 configure ansible plugin in Jenkins with name and path to directory](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/47b766f7-348f-47c6-b5c1-40fab3451b15)
+
 Note: Ensure that Ansible runs against the Dev environment successfully.
+
+![38 pipeline script in Jenkinsfile](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/7c63991b-977a-41e5-9c40-5681d389b28e)
+
+![39 updating the dev file in inventory folder](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/df5c7c60-1cbf-405b-91b2-d66d7be518d1)
+
+![40 succesful ansible playbook run on Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/07aaf1b9-3f4d-48c2-9d6e-e7a985569942)
+
+![40b succesful ansible playbook run on Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8545ad46-6806-414c-a0f7-3914150df864)
+
+![41a](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/617ba813-05fe-4980-bc96-c3d7f84efa24)
+
+![41b](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/991d56f5-d528-49ab-8d2d-6d69215b79cb)
+
+![41c](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8006fc6c-5030-4b83-ae4f-911fb9360259)
 
 If everything goes well for you, it means, the Dev environment has an up-to-date configuration. But what if we need to deploy to other environments?
 
@@ -318,11 +446,11 @@ Manually updating the Jenkinsfile is definitely not an option. And that should b
 
 Well, unfortunately, we will not be doing any of the highlighted options. What we will be doing is to parameterise the deployment. So that at the point of execution, the appropriate values are applied.
 
-Parameterizing Jenkinsfile For Ansible Deployment
+### Parameterizing Jenkinsfile For Ansible Deployment
+
 To deploy to other environments, we will need to use parameters.
 
 Update sit inventory with new servers
-
 
 ![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/59777a29-7029-4285-b491-af56cbc8e456)
 
@@ -336,12 +464,23 @@ pipeline {
     }
 ...
 
+![42 declaring parameters in our jenkins file](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/5ec1e1c9-f4af-41cd-9423-30f648cc7f73)
+
 In the Ansible execution section, remove the hardcoded inventory/dev and replace with `${inventory}
 From now on, each time you hit on execute, it will expect an input.
 
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/12ff0b2e-ff00-48d1-ad9e-4b2cf76a5091)
+
 Notice that the default value loads up, but we can now specify which environment we want to deploy the configuration to. Simply type sit and hit Run
 
+![image](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/10df9ec1-41b2-4bd1-b0ee-e1cf81a58c4f)
+
 Add another parameter. This time, introduce tagging in Ansible. You can limit the Ansible execution to a specific role or playbook desired. Therefore, add an Ansible tag to run against webserver only. Test this locally first to get the experience. Once you understand this, update Jenkinsfile and run it from Jenkins.
+
+![43 running the playbook after parameterization](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/86bb0db6-d833-4087-8677-6adff2ce56aa)
+
+![44 blueocean dashborad for ansible playbooks in main and feature branches](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/f0fbd872-0957-470a-8610-723b80236dd3)
+
 
 ## CI/CD PIPELINE FOR TODO APPLICATION
 
@@ -355,26 +494,51 @@ Fork the repository below into your GitHub account
 
 https://github.com/Sakirat/php-todo.git
 
+![45 fork PHP todo from darey io](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/eeb9adaf-450d-46ce-9285-4000eeaa46f2)
+
+![46 clone my github php todo](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/a0fdb697-2c10-4fe3-b6b6-883f8de20548)
+
 On you Jenkins server, install PHP, its dependencies and Composer tool (Feel free to do this manually at first, then update your Ansible accordingly later)
 
-  `sudo apt install -y zip libapache2-mod-php phploc php-{xml,bcmath,bz2,intl,gd,mbstring,mysql,zip}`
+![47 installing PHP and its dependencies](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/d1cba5bd-e52e-4c6d-8f77-ea39f0b44a9d)
+
+![48 confirm status of php as active and running](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/afad06c0-ed88-4510-a903-c8977e7ccf93)
+
+![49 install composer and its dependencies and check version](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/342de388-aa4d-47eb-92a7-90e2684b0a5c)
 
 #### Install Jenkins plugins
 
 Plot plugin
 
+![50 install plot plugin](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/5120f88a-fefb-4703-a3e7-7b45ee7095c9)
+
 Artifactory plugin
 
+![51 installing artifactory plugin in Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/f53f6417-f123-4203-a0f9-5dfdba53c8f1)
+
+![52 spin up new instance for Artifactory](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/35bb4eb4-2ee3-459b-b723-27fc65695ebe)
+
 We will use plot plugin to display tests reports, and code coverage information.
+
 The Artifactory plugin will be used to easily upload code artifacts into an Artifactory server.
 
 In Jenkins UI configure Artifactory
+
+![53 running ansible playbook to setup artifactory](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/78b3d027-d41c-48ec-a21c-e89043d5d096)
+
+![53b output on jenkins for artifactory](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/14c8fde9-0e5d-4c9e-9547-1acd27d900d4)
 
 Configure the server ID, URL and Credentials, run Test Connection.
 
 ### Phase 2 – Integrate Artifactory repository with Jenkins
 
+![54 artifactory on browser](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/66e65402-a840-49c6-958f-cbb7c9b9da74)
+
 Create a dummy Jenkinsfile in the repository
+
+![55 creating a generic repository on artifactory](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4ab8880c-8098-459a-9228-a4340e288fe4)
+
+![57 connecting to php repository on Jenkins and running jenkinsfile](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4858b0a2-67d0-4ee7-bb3c-426025cc2168)
 
 Using Blue Ocean, create a multibranch Jenkins pipeline
 
@@ -418,6 +582,9 @@ pipeline {
     }
   }
 }
+
+![58 update jenkins file](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/6972e953-8fa2-4356-a0a2-fe1521ac8a42)
+
 
 Notice the Prepare Dependencies section
 
@@ -474,7 +641,19 @@ stage('Plot Code Coverage Report') {
     }
 
 
+![59 adding the code analysis file and plot code to the jenkins file](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/56a690f1-ce5c-44b5-9662-f4bd98f3d329)
+
+![60 installing phploc](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/053e17a6-3311-42ba-bb0d-03351217097a)
+
+
 You should now see a Plot menu item on the left menu. Click on it to see the charts. (The analytics may not mean much to you as it is meant to be read by developers. So, you need not worry much about it – this is just to give you an idea of the real-world implementation).
+
+![61 plot coverage ran succesfully on jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/130d43bf-b8f6-44b3-9b7b-3a0484350bda)
+
+![62 php plot on Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4a633d50-01c8-4160-96c6-d2899f5f1dbd)
+
+![62b php plot on jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/b7824727-9b28-4ec8-ae8a-7722a186ff3b)
+
 
 Bundle the application code for into an artifact (archived package) upload to Artifactory
 
@@ -507,6 +686,11 @@ stage ('Package Artifact') {
 
         }
 
+![63 installing zip](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/45c8b66e-8f02-45f0-b4da-3f1276db51cc)
+
+![64 adding more stages in the Jenkinsfile to package artifactory and upload artifacts](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/55b814ae-03f5-4f5f-a63a-7bb46f477ec2)
+
+
 Deploy the application to the dev environment by launching Ansible pipeline
 
 stage ('Deploy to Dev Environment') {
@@ -514,6 +698,25 @@ stage ('Deploy to Dev Environment') {
     build job: 'ansible-project/main', parameters: [[$class: 'StringParameterValue', name: 'env', value: 'dev']], propagate: false, wait: true
     }
   }
+
+![65 running on Jenkins to show package artifacts and upload artifacts to artifactory](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/4c406cb3-58a2-4033-b6b2-6ce542241a58)
+
+![66 showing artifacts in artifactory](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8267d67d-c06d-4917-91d8-5580630e10d6)
+
+![67 details for artifact of php todo](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/fdba9521-1b6d-4429-a64b-25dc12ffb6fd)
+
+![68 set up instance for todo server](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/c9930c52-60cc-44d1-b1cf-d4498740d32c)
+
+![69 role playbook site yml file for the todo server](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/a7e5da11-f5b5-469c-b0ae-7a30b3001d1d)
+
+![70 updating dev file in inventory folder to reflect todo's private IP](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/295dcffc-0da3-4ad4-98d8-5a234abdad24)
+
+![71 running Jenkins file to deploy to dev env which triggers from php repo to ansible config repo](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/0b988251-5871-4028-9387-f70364f7a4e1)
+
+![72 reflecting in Ansible config repo](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/a4b8c14a-f2bd-47d1-b15a-5e7abf1338b0)
+
+![73 todo server](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/0cb27add-f8a8-47cd-95ab-a721075211ff)
+
 
 The build job used in this step tells Jenkins to start another job. In this case it is the ansible-project job, and we are targeting the main branch. Hence, we have ansible-project/main. Since the Ansible project requires parameters to be passed in, we have included this by specifying the parameters section. The name of the parameter is env and its value is dev. Meaning, deploy to the Development environment.
 
@@ -535,9 +738,19 @@ Despite that DevOps CI/CD pipeline helps with fast software delivery, it is of t
 
 Install SonarQube on Ubuntu 20.04 With PostgreSQL as Backend Database
 
+![74 sonarqube instance setup on AWS](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/6cf7184a-d628-4e52-a0cc-1f8962a9533b)
+
+![77 opening portd for the sonarqube instance](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/c2b460cd-b59c-42c4-ba9b-9325463414b5)
+
 CONFIGURE SONARQUBE
 
+![75 updating sonarcube IP in ci file in inventory folder](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/13ff4651-008a-4aff-9280-717528ed73e4)
+
 We cannot run SonarQube as a root user, if you run using root user it will stop automatically. The ideal approach will be to create a separate group and a user to run SonarQube
+
+![76 sonarcube on jenkinsfile ran successfully](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/98aad945-0a6f-4c2e-96a3-9e3eac7567f2)
+
+![76b sonarqube job on jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/7fd7e906-c8e5-4b80-8fd0-029e8dbe9328)
 
 Access SonarQube
 
@@ -545,7 +758,11 @@ To access SonarQube using browser, type server’s IP address followed by port 9
 
 http://server_IP:9000 OR http://localhost:9000
 
+![78 sonarqube webserver page](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8e5b7d59-d6fe-4882-a8ff-4616fcbfeb1e)
+
 Login to SonarQube with default administrator username and password – admin
+
+![79 logging into sonarqube with default username and password](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/3e55f550-d47f-4fd3-9edb-abc89ebe8431)
 
 Now, when SonarQube is up and running, it is time to setup our Quality gate in Jenkins.
 
@@ -553,7 +770,11 @@ Now, when SonarQube is up and running, it is time to setup our Quality gate in J
 
 In Jenkins, install SonarScanner plugin
 
+![80 install sonarqube scanner plugin in Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/c8942ee2-6911-4303-9939-cfec5cad997e)
+
 Navigate to configure system in Jenkins. Add SonarQube server as shown below:
+
+![81 adding sonarqube server on Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/b491cf6e-bb1a-4261-a44c-d8a752f0e0bd)
 
   Manage Jenkins > Configure System
 
@@ -561,11 +782,17 @@ Navigate to configure system in Jenkins. Add SonarQube server as shown below:
 
  User > My Account > Security > Generate Tokens
 
+![82 generate token](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/f32557ad-f5d6-47f4-89ad-31062fd06e70)
+
  Configure Quality Gate Jenkins Webhook in SonarQube – The URL should point to your Jenkins server http://{JENKINS_HOST}/sonarqube-webhook/
 
 Administration > Configuration > Webhooks > Create
 
+![83 setup webhook in sonarqube for jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/723f8392-22cd-4fa5-92c9-5e2f3891864b)
+
 Setup SonarQube scanner from Jenkins – Global Tool Configuration
+
+![84 setup sonarqubw scanner for Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/578507f1-080a-4fd9-9ae2-aa136ff844f7)
 
 Manage Jenkins > Global Tool Configuration
 
@@ -585,7 +812,11 @@ stage('SonarQube Quality Gate') {
         }
     }
 
+![85 add sonarqube qualitygate to the jenkinsfile](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/562191d5-0cad-46e1-a299-959ead787ef6)
+
    NOTE: The above step will fail because we have not updated `sonar-scanner.properties
+
+![86 step failed because we have not updated sonar-scanner properties](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/b357e37f-909f-401a-84d7-c75cee38903f)
 
 Configure sonar-scanner.properties – From the step above, Jenkins will install the scanner tool on the Linux server. You will need to go into the tools directory on the server to configure the properties file in which SonarQube will require to function during pipeline execution. 
 
@@ -605,170 +836,14 @@ sonar.php.exclusions=**/vendor/**
 sonar.php.coverage.reportPaths=build/logs/clover.xml
 sonar.php.tests.reportPath=build/logs/junit.xml
 
+![87 configure sonarscanner properties](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/8dde245d-1f2f-4047-81f0-022155c8ed33)
+
+![88 updating with vi the sonar scanner properties file to add config relating to php todo](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/a9f7be2e-9333-4461-99ef-e355a6adb4c9)
+
+![89 sonarqube quality stage passed](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/dc03f91b-2aad-44ed-917b-c8582c92b7c4)
+
+
 HINT: To know what exactly to put inside the sonar-scanner.properties file, SonarQube has a configurations page where you can get some directions.
-
-A brief explanation of what is going on the the stage – set the environment variable for the scannerHome use the same name used when you configured SonarQube Scanner from Jenkins Global Tool Configuration. If you remember, the name was SonarQubeScanner. Then, within the steps use shell to run the scanner from bin directory.
-
-To further examine the configuration of the scanner tool on the Jenkins server – navigate into the tools directory
-
- ASSIGNMENTS (INCLUDE) AND COMMUNITY ROLES
-Ansible dynamic assignments (include) and community roles
-Introducing dynamic assignment into our structure
-Update site.yml with dynamic assignments
-Load balancer roles
-(STEP 24) PROJECT 14 EXPERIENCE CONTINUOUS INTEGRATION WITH JENKINS | ANSIBLE | ARTIFACTORY | SONARQUBE | PHP
-Experience continuous integration with jenkins | ansible | artifactory | sonarqube | php
-Why are we doing everything we are doing? – 13 devops success metrics
-Simulating a typical ci/cd pipeline for a php based application
-Ansible roles for ci environment
-Running ansible playbook from jenkins
-Ci/cd pipeline for todo application
-Sonarqube installation
-Configure sonarqube
-Configure sonarqube and jenkins for quality gate
-(STEP 26) PROJECT 15 AWS CLOUD SOLUTION FOR 2 COMPANY WEBSITES USING A REVERSE PROXY TECHNOLOGY
-Aws cloud solution for 2 company websites using a reverse proxy technology
-Set up a virtual private network (vpc)
-Configure application load balancer (alb)
-(STEP 28) PROJECT 16 AUTOMATE INFRASTRUCTURE WITH IAC USING TERRAFORM PART 1
-Automate infrastructure with iac using terraform part 1
-Vpc | subnets | security groups
-Fixing the problems by code refactoring
-Introducing variables.tf & terraform.tfvars
-(STEP 29) PROJECT 17 AUTOMATE INFRASTRUCTURE WITH IAC USING TERRAFORM PART 2
-Automate infrastructure with iac using terraform. part 2
-Aws routes
-Create security groups
-Create certificate from amazon cerificate manager
-Creating austoaling groups
-Storage and database
-(STEP 30) PROJECT 18 : AUTOMATE INFRASTRUCTURE WITH IAC USING TERRAFORM-PART 3
-Automate infrastructure with iac using terraform. part 3 – refactoring
-When to use workspaces or directory?
-Refactor your project using modules
-Complete the terraform configuration
-(STEP 33) PROJECT 19: AUTOMATE INFRASTRUCTURE WITH IAC USING TERRAFORM. PART 4 - TERRAFORM CLOUD
-Automate infrastructure with iac using terraform. part 4 – terraform cloud
-(STEP 34) PROJECT 20: MIGRATION TO THE СLOUD WITH CONTAINERIZATION. PART 1 - DOCKER & DOCKER COMPOSE
-Migration to the сloud with containerization. part 1 – docker & docker compose
-Connecting to the mysql docker container
-Practice task
-(STEP 35) PROJECT 21: ORCHESTRATING CONTAINERS ACROSS MULTIPLE VIRTUAL SERVERS WITH KUBERNETES. PART 1
-Orchestrating containers across multiple virtual servers with kubernetes. part 1
-Kubernetes architecture
-Step 0-install client tools before bootstrapping the cluster.
-Aws cloud resources for kubernetes cluster
-Security groups
-Step 2 – create compute resources
-Step 3 prepare the self-signed certificate authority and generate tls certificates
-Step 4 – distributing the client and server certificates
-Step 5 use `kubectl` to generate kubernetes configuration files for authentication
-Step 6 prepare the etcd database for encryption at rest.
-Bootstrap the control plane
-Test that everything is working fine
-Configuring the kubernetes worker nodes
-Quick overview of kubernetes network policy and how it is implemented
-Configure the worker nodes components
-Final steps
-(STEP 36): PROJECT 22: DEPLOYING APPLICATIONS INTO KUBERNETES CLUSTER
-Deploying applications into kubernetes cluster
-Understanding the concept
-Common kubernetes objects
-Accessing the app from the browser
-Create a replica set
-Using aws load balancer to access your service in kubernetes.
-Using deployment controllers
-Persisting data for pods
-(STEP 37): PROJECT 23: PERSISTING DATA IN KUBERNETES
-Persisting data in kubernetes
-Managing volumes dynamically with pvs and pvcs
-Configmap
-(STEP 38): PROJECT 24: BUILDING ELASTIC KUBERNETES SERVICE (EKS) WITH TERRAFORM
-Building elastic kubernetes service (eks) with terraform
-Building elastic kubernetes service (eks) with terraform – part 2
-Fixing the error
-Deploy applications with helm
-Deploy jenkins with helm
-Quick task for you
-(STEP 39): PROJECT 25: DEPLOYING AND PACKAGING APPLICATIONS INTO KUBERNETES
-Configuring ingress for tls
-Deploying cert-manager and managing tls/ssl for ingress
-Deploying ingress controller and managing ingress resources
-Deploying and packaging applications into kubernetes with helm
-(STEP 40): PROJECT 26: RESERVED FOR MASTER CLASS
-Setting up private repositories and preparing ci pipelines with jenkins
-(STEP 41): PROJECT 27: RESERVED FOR MASTER CLASS
-Project 27
-(STEP 42): PROJECT 28: RESERVED FOR MASTER CLASS
-Project 28
-(STEP 43): PROJECT 29: RESERVED FOR MASTER CLASS
-Project 29
-(STEP 48): PROJECT 30: RESERVED FOR MASTER CLASS
-Project 30
-Projects
-Projects
-Docs
-(STEP 24) Project 14 Experience Continuous Integration With Jenkins | Ansible | Artifactory | Sonarqube | PHP
-CONFIGURE SONARQUBE AND JENKINS FOR QUALITY GATE
-In Jenkins, install SonarScanner plugin
-
-Navigate to configure system in Jenkins. Add SonarQube server as shown below:
-
-  Manage Jenkins > Configure System
-
-
-
-Generate authentication token in SonarQube
-
- User > My Account > Security > Generate Tokens
-
-
-
-Configure Quality Gate Jenkins Webhook in SonarQube – The URL should point to your Jenkins server http://{JENKINS_HOST}/sonarqube-webhook/
-
-Administration > Configuration > Webhooks > Create
-
-
-
-Setup SonarQube scanner from Jenkins – Global Tool Configuration
-
-Manage Jenkins > Global Tool Configuration
-
-
-
-Update Jenkins Pipeline to include SonarQube scanning and Quality Gate
-Below is the snippet for a Quality Gate stage in Jenkinsfile.
-
-    stage('SonarQube Quality Gate') {
-        environment {
-            scannerHome = tool 'SonarQubeScanner'
-        }
-        steps {
-            withSonarQubeEnv('sonarqube') {
-                sh "${scannerHome}/bin/sonar-scanner"
-            }
-
-        }
-    }
-NOTE: The above step will fail because we have not updated `sonar-scanner.properties
-
-Configure sonar-scanner.properties – From the step above, Jenkins will install the scanner tool on the Linux server. You will need to go into the tools directory on the server to configure the properties file in which SonarQube will require to function during pipeline execution.
-cd /var/lib/jenkins/tools/hudson.plugins.sonar.SonarRunnerInstallation/SonarQubeScanner/conf/
-Open sonar-scanner.properties file
-
-sudo vi sonar-scanner.properties
-Add configuration related to php-todo project
-
-sonar.host.url=http://<SonarQube-Server-IP-address>:9000
-sonar.projectKey=php-todo
-#----- Default source code encoding
-sonar.sourceEncoding=UTF-8
-sonar.php.exclusions=**/vendor/**
-sonar.php.coverage.reportPaths=build/logs/clover.xml
-sonar.php.tests.reportPath=build/logs/junit.xml
-HINT: To know what exactly to put inside the sonar-scanner.properties file, SonarQube has a configurations page where you can get some directions.
-
-
 
 A brief explanation of what is going on the the stage – set the environment variable for the scannerHome use the same name used when you configured SonarQube Scanner from Jenkins Global Tool Configuration. If you remember, the name was SonarQubeScanner. Then, within the steps use shell to run the scanner from bin directory.
 
@@ -800,6 +875,7 @@ Within the generated block, you will use the sh command to run shell on the serv
 
 Indeed, this has been one of the longest projects from Project 1, and if everything has worked out for you so far, you should have a view like below:
 
+![89 sonarqube quality stage passed](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/2c8be506-8706-479c-a668-9b72a73659ab)
 
 But we are not completely done yet!
 
@@ -810,6 +886,10 @@ Navigate to php-todo project in SonarQube
 There are bugs, and there is 0.0% code coverage. (code coverage is a percentage of unit tests added by developers to test functions and objects in the code)
 
 If you click on php-todo project for further analysis, you will see that there is 6 hours’ worth of technical debt, code smells and security issues in the code.
+
+![90 sonarcube showing bugs and code smells after quality gate](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/59c7e8aa-eb06-4c73-ba00-3db8ac0b0369)
+
+![90b](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/64ac79ad-4993-4d01-8a82-54df1b7ed84a)
 
 In the development environment, this is acceptable as developers will need to keep iterating over their code towards perfection. But as a DevOps engineer working on the pipeline, we must ensure that the quality gate step causes the pipeline to fail if the conditions for quality are not met.
 
@@ -861,9 +941,19 @@ The complete stage will now look like this:
         }
     }
 
+![91 update jenkinsfile with updated sonaqube](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/23ad2e40-6b5c-413c-a637-48ec1adf3bcb)
+
+![92 install npm](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/74c0cc4f-8616-4a5a-9732-50a98f932278)
+
+![93 install php xdebug](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/da28fc9e-d300-4889-a7b6-ac33e8ce0fd4)
+
+![94 in xdebug file change xdebug mode=develop from develop to coverage and uncomment it](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/1e8c18ff-8373-4cd2-9092-0a4c1ae657c0)
+
 To test, create different branches and push to GitHub. You will realise that only branches other than develop, hotfix, release, main, or master will be able to deploy the code.
 
 If everything goes well, you should be able to see something like this:
+
+![95 quality gate fails and auto goes to end to be reworked](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/b1fce999-ec4b-455e-a732-fc43ef257357)
 
  Notice that with the current state of the code, it cannot be deployed to Integration environments due to its quality. In the real world, DevOps engineers will push this back to developers to work on the code further, based on SonarQube quality report. Once everything is good with code quality, the pipeline will pass and proceed with sipping the codes further to a higher environment.
 
@@ -871,7 +961,15 @@ Complete the following tasks to finish Project 14
 
 Introduce Jenkins agents – Add 2 more servers to be used as Jenkins agent. Configure Jenkins to run its pipeline jobs randomly on any available agent nodes.
 
+![96 spin up 2 jenkins agent instances](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/0a2c94ad-0208-44ba-a6df-18ed7df6f07c)
+
+![97 installing Java on the two Jenkins agents](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/95b5d785-69bd-41b9-8dfa-13cc08bd65fe)
+
 Configure webhook between Jenkins and GitHub to automatically run the pipeline when there is a code push.   
+
+![98 setting up 2 agent nodes on jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/6556d362-0310-4ecb-ab10-3fb272e1858e)
+
+![99 setting up webhook in github todo repo for Jenkins](https://github.com/Sakirat/Project_Based_Learning/assets/110112922/906a3429-5986-4e3e-8f31-ba2be60fc42b)
 
 Deploy the application to all the environments
 
